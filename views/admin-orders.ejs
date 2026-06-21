@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin: All Orders</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>All Orders (Admin)</h1>
+        <p><a href="/">Back to deals</a></p>
+    </header>
+    <main>
+    <% if (orders.length === 0) { %>
+        <p>No orders yet.</p>
+    <% } else { %>
+        <% orders.forEach(order => { %>
+        <div class="order-card">
+            <h2><%= order.title %></h2>
+            <p>Customer: <%= order.customer_name %> (<%= order.customer_email %>)
+                <% if (order.telegram_handle) { %> — Telegram: <%= order.telegram_handle %><% } %>
+            </p>
+            <p>Price: $<%= order.sell_price %> | Deposit: $<%= order.deposit_amount %></p>
+            <p>Reserved: <%= new Date(order.created_at).toLocaleString() %></p>
+            <p>Status: <span class="status-tag status-<%= order.status %>"><%= order.status.replace('_', ' ') %></span></p>
+
+            <form method="POST" action="/admin/orders/<%= order.id %>/status">
+            <label>Update status:
+                <select name="status">
+                <option value="pending_contact" <%= order.status === 'pending_contact' ? 'selected' : '' %>>Pending Contact</option>
+                <option value="deposit_confirmed" <%= order.status === 'deposit_confirmed' ? 'selected' : '' %>>Deposit Confirmed</option>
+                <option value="ordered" <%= order.status === 'ordered' ? 'selected' : '' %>>Ordered</option>
+                <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                <option value="customs" <%= order.status === 'customs' ? 'selected' : '' %>>In Customs</option>
+                <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                </select>
+            </label>
+            <button type="submit">Update</button>
+            </form>
+        </div>
+        <% }) %>
+    <% } %>
+    </main>
+</body>
+</html>

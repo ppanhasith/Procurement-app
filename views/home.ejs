@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Procurement Deals</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+    <h1>Procurement Deals</h1>
+    <% if (user) { %>
+        <p>Welcome, <%= user.name %>! <a href="/logout">Logout</a> | <a href="/my-orders">My Orders</a>
+        <% if (user.is_admin) { %>
+            | <a href="/deals/new">+ New Deal</a>
+        <% } %>
+        </p>
+    <% } else { %>
+        <p><a href="/signup">Sign up</a> | <a href="/login">Login</a></p>
+    <% } %>
+    </header>
+    <main>
+    <% if (deals.length === 0) { %>
+        <p>No deals available right now. Check back soon!</p>
+    <% } else { %>
+        <% deals.forEach(deal => { %>
+        <div class="deal-card">
+            <h2><%= deal.title %></h2>
+            <p><%= deal.description %></p>
+            <p><strong>Price: $<%= deal.sell_price %></strong></p>
+            <p>Deposit required: $<%= deal.deposit_amount %></p>
+            <p>Slots remaining: <%= deal.slots_remaining %> / <%= deal.slots_total %></p>
+            <p>Estimated wait: <%= deal.estimated_wait_days %> days</p>
+
+            <% if (user && deal.slots_remaining > 0) { %>
+                <form method="POST" action="/deals/<%= deal.id %>/reserve">
+                    <button type="submit">Reserve</button>
+                </form>
+            <% } else if (deal.slots_remaining <= 0) { %>
+                <p><em>Fully booked</em></p>
+            <% } else { %>
+                <p><a href="/login">Log in</a> to reserve this deal</p>
+            <% } %>
+        </div>
+        <% }) %>
+    <% } %>
+    </main>
+</body>
+</html>

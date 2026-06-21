@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New Deal</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Create New Deal</h1>
+
+    <% if (error) { %>
+    <p style="color: red;"><%= error %></p>
+    <% } %>
+
+    <form method="POST" action="/deals/new">
+    <label>Title: <input type="text" name="title" required></label><br>
+    <label>Description: <textarea name="description"></textarea></label><br>
+    <label>Source price (your cost): <input type="number" step="0.01" name="source_price"></label><br>
+    <label>Sell price (customer pays): <input type="number" step="0.01" name="sell_price" required></label><br>
+    <label>Deposit amount: <input type="number" step="0.01" name="deposit_amount" required></label><br>
+    <label>Total slots: <input type="number" name="slots_total" required></label><br>
+    <label>Estimated wait (days): <input type="number" name="estimated_wait_days"></label><br>
+    <button type="submit">Create Deal</button>
+    </form>
+
+    <p><a href="/">Back to deals</a></p>
+</body>
+</html>
