@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Procurement</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo"><span class="dot"></span> Procurement</div>
+        <h1>Log in</h1>
+
+        <% if (error) { %>
+            <div class="error-msg"><%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" required placeholder="you@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="auth-submit">Log In</button>
+        </form>
+
+        <p class="auth-footer">No account yet? <a href="/signup">Sign up</a></p>
+    </div>
+</div>
+
+</body>
+</html>

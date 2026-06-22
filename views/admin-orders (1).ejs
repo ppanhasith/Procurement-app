@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders — Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="nav">
+    <a href="/" class="nav-logo">
+        <span class="dot"></span> Procurement
+    </a>
+    <ul class="nav-links">
+        <li><a href="/">Deals</a></li>
+        <li><a href="/my-orders">My Orders</a></li>
+        <li><a href="/deals/new">+ New Deal</a></li>
+        <li><a href="/admin/orders" class="active">All Orders</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+</nav>
+
+<section class="section">
+    <a href="/" class="back-link">&larr; Back to deals</a>
+
+    <div class="section-header">
+        <h2>All Orders (Admin)</h2>
+    </div>
+
+    <% if (orders.length === 0) { %>
+        <div class="empty-state">
+            <div class="empty-icon">[ ]</div>
+            <p>No orders yet.</p>
+        </div>
+    <% } else { %>
+        <div class="orders-list">
+            <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <h2><%= order.title %></h2>
+                    <p><strong>Customer:</strong> <%= order.customer_name %> (<%= order.customer_email %>)
+                        <% if (order.telegram_handle) { %> &mdash; TG: <%= order.telegram_handle %><% } %>
+                    </p>
+                    <div class="order-meta">
+                        <span class="deal-tag price">$<%= order.sell_price %></span>
+                        <span class="deal-tag">Deposit: $<%= order.deposit_amount %></span>
+                    </div>
+                    <p>Status: <span class="status-tag <%= order.status %>"><%= order.status.replace(/_/g, ' ') %></span></p>
+                    <p style="color:#888;font-size:0.85rem;">Reserved: <%= new Date(order.created_at).toLocaleString() %></p>
+
+                    <form method="POST" action="/admin/orders/<%= order.id %>/status" class="admin-status-form">
+                        <select name="status">
+                            <option value="pending_contact" <%= order.status === 'pending_contact' ? 'selected' : '' %>>Pending Contact</option>
+                            <option value="deposit_confirmed" <%= order.status === 'deposit_confirmed' ? 'selected' : '' %>>Deposit Confirmed</option>
+                            <option value="ordered" <%= order.status === 'ordered' ? 'selected' : '' %>>Ordered</option>
+                            <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
+                            <option value="customs" <%= order.status === 'customs' ? 'selected' : '' %>>In Customs</option>
+                            <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</section>
+
+<footer class="footer">
+    <p>Procurement Deals &mdash; Admin Panel</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procurement Deals</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <a href="/" class="nav-logo">
+        <span class="dot"></span> Procurement
+    </a>
+    <ul class="nav-links">
+        <% if (user) { %>
+            <li><a href="/">Deals</a></li>
+            <li><a href="/my-orders">My Orders</a></li>
+            <% if (user.is_admin) { %>
+                <li><a href="/deals/new">+ New Deal</a></li>
+                <li><a href="/admin/orders">All Orders</a></li>
+            <% } %>
+            <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/signup" class="nav-btn">Sign Up</a></li>
+        <% } %>
+    </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <p class="hero-eyebrow">Premium tech sourcing from China</p>
+    <h1>Source <span>premium</span> tech.<br>Pay less. Wait smart.</h1>
+    <p class="hero-sub">Pre-order high-end tech products at prices you won't find locally. We source, ship, and deliver — you save.</p>
+    <a href="#deals" class="hero-cta">Browse Deals</a>
+</section>
+
+<!-- Brand Ticker -->
+<div class="brand-bar">
+    <div class="brand-track">
+        <span>ASUS</span>
+        <span>NVIDIA</span>
+        <span>MSI</span>
+        <span>Razer</span>
+        <span>Logitech</span>
+        <span>Samsung</span>
+        <span>AMD</span>
+        <span>Corsair</span>
+        <span>HyperX</span>
+        <span>Shure</span>
+        <span>Rode</span>
+        <span>Anbernic</span>
+        <!-- Duplicate for seamless loop -->
+        <span>ASUS</span>
+        <span>NVIDIA</span>
+        <span>MSI</span>
+        <span>Razer</span>
+        <span>Logitech</span>
+        <span>Samsung</span>
+        <span>AMD</span>
+        <span>Corsair</span>
+        <span>HyperX</span>
+        <span>Shure</span>
+        <span>Rode</span>
+        <span>Anbernic</span>
+    </div>
+</div>
+
+<!-- Deals Section -->
+<section class="section" id="deals">
+    <div class="section-header">
+        <h2>Available Deals</h2>
+    </div>
+
+    <% if (deals.length === 0) { %>
+        <div class="empty-state">
+            <div class="empty-icon">[ ]</div>
+            <p>No deals available right now.</p>
+            <p>Check back soon — new drops land regularly.</p>
+        </div>
+    <% } else { %>
+        <div class="deals-grid">
+            <% deals.forEach(deal => { %>
+                <div class="deal-card">
+                    <div class="deal-card-img">
+                        <% if (deal.image_url) { %>
+                            <img src="<%= deal.image_url %>" alt="<%= deal.title %>">
+                        <% } else { %>
+                            <span class="placeholder">No image</span>
+                        <% } %>
+                    </div>
+                    <div class="deal-card-body">
+                        <h2><%= deal.title %></h2>
+                        <p class="deal-desc"><%= deal.description %></p>
+                        <div class="deal-meta">
+                            <span class="deal-tag price">$<%= deal.sell_price %></span>
+                            <span class="deal-tag">Deposit: $<%= deal.deposit_amount %></span>
+                            <span class="deal-tag slots"><%= deal.slots_remaining %>/<%= deal.slots_total %> slots</span>
+                            <span class="deal-tag wait"><%= deal.estimated_wait_days %>d wait</span>
+                        </div>
+
+                        <% if (user && deal.slots_remaining > 0) { %>
+                            <form method="POST" action="/deals/<%= deal.id %>/reserve" style="margin:0">
+                                <button type="submit" class="reserve-btn">Reserve Now</button>
+                            </form>
+                        <% } else if (deal.slots_remaining <= 0) { %>
+                            <span class="fully-booked">Fully Booked</span>
+                        <% } else { %>
+                            <span class="login-prompt"><a href="/login">Log in</a> to reserve</span>
+                        <% } %>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>Procurement Deals &mdash; Phnom Penh, Cambodia &mdash; Contact via <a href="#">Telegram</a></p>
+</footer>
+
+</body>
+</html>
